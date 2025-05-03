@@ -5,7 +5,6 @@ import datetime
 import os
 import pandas as pd
 import plotly.express as px
-from config import SPREADSHEET_ID, SERVICE_ACCOUNT_INFO
 
 
 # Set page config
@@ -49,18 +48,19 @@ if st.button("Log Mood", type="primary"):
         # Create a new row
         new_row = [timestamp, mood_emoji.split()[0], note if note else "No note provided"]
         
-        # Set up credentials using the service account info
+        # Set up credentials using Streamlit secrets
         scope = ['https://spreadsheets.google.com/feeds',
                 'https://www.googleapis.com/auth/drive']
         
+        # Get credentials from Streamlit secrets
         credentials = service_account.Credentials.from_service_account_info(
-            SERVICE_ACCOUNT_INFO,
+            st.secrets["gcp_service_account"],
             scopes=scope
         )
         
         # Open the sheet and append the row
         gc = gspread.authorize(credentials)
-        sh = gc.open_by_key(SPREADSHEET_ID)
+        sh = gc.open_by_key(st.secrets["google_sheets"]["spreadsheet_id"])
         worksheet = sh.sheet1  # Use the first sheet
         worksheet.append_row(new_row)
         
