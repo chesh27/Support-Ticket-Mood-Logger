@@ -17,14 +17,7 @@ A Streamlit application for logging and visualizing the mood of support tickets.
    ```bash
    pip install -r requirements.txt
    ```
-3. Set up Google Sheets API:
-   - Create a project in Google Cloud Console
-   - Enable Google Sheets API
-   - Create a service account and download credentials.json
-   - Place credentials.json in the project directory
-   - Share your Google Sheet with the service account email
-
-4. Run the application:
+3. Run the application:
    ```bash
    streamlit run mood_logger.py
    ```
@@ -44,6 +37,10 @@ A Streamlit application for logging and visualizing the mood of support tickets.
 - google-auth
 - pandas
 - plotly
+
+## Note
+
+This application uses a pre-configured Google Sheet and service account credentials. All users will log their moods to the same shared sheet. No additional setup is required!
 
 ## License
 

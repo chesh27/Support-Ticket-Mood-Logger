@@ -5,6 +5,7 @@ import datetime
 import os
 import pandas as pd
 import plotly.express as px
+from config import SPREADSHEET_ID, SERVICE_ACCOUNT_INFO
 
 
 # Set page config
@@ -48,27 +49,18 @@ if st.button("Log Mood", type="primary"):
         # Create a new row
         new_row = [timestamp, mood_emoji.split()[0], note if note else "No note provided"]
         
-        # Set up credentials
+        # Set up credentials using the service account info
         scope = ['https://spreadsheets.google.com/feeds',
                 'https://www.googleapis.com/auth/drive']
         
-        # Use the absolute path to credentials.json
-        credentials_path = '/Users/cheshta/Documents/Mood_Logging_Project/credentials.json'
-        # st.write(f"Using credentials from: {credentials_path}")
-        
-        if not os.path.exists(credentials_path):
-            st.error(f"❌ Credentials file not found at: {credentials_path}")
-            st.info("Please make sure your credentials.json file is in the correct location.")
-            raise FileNotFoundError(f"Credentials file not found at {credentials_path}")
-            
-        credentials = service_account.Credentials.from_service_account_file(
-            credentials_path,
+        credentials = service_account.Credentials.from_service_account_info(
+            SERVICE_ACCOUNT_INFO,
             scopes=scope
         )
         
         # Open the sheet and append the row
         gc = gspread.authorize(credentials)
-        sh = gc.open_by_key('11-APIrn4RxLYfSoXNIfVlQjv-djMjCtGSm-qlZtDCqg')
+        sh = gc.open_by_key(SPREADSHEET_ID)
         worksheet = sh.sheet1  # Use the first sheet
         worksheet.append_row(new_row)
         
